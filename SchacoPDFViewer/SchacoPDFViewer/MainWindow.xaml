@@ -15,9 +15,12 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
+            <ColumnDefinition Width="3"/>
             <ColumnDefinition/>
+            <ColumnDefinition Width="3"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+      
         <Grid Grid.Column="0">
             <TreeView HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" ItemsSource="{Binding Nodes}">
                 <TreeView.ItemTemplate>
@@ -35,9 +38,10 @@
                 </TreeView.ItemContainerStyle>
             </TreeView>
         </Grid>
-
-        <Grid Grid.Column="1"></Grid>
-        <Grid Grid.Column="2">
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Background="Gray" Width="1" />
+        <Grid Grid.Column="2"></Grid>
+        <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch" Background="Gray" Width="1" />
+        <Grid Grid.Column="4">
             <mpp:MoonPdfPanel  Background = " LightGray "   ViewType = "SinglePage"   PageMargin = "5"  AllowDrop = "True" />
         </Grid>
     </Grid>
