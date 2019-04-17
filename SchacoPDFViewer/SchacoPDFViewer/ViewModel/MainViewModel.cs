@@ -1,4 +1,5 @@
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
 using System.Collections.ObjectModel;
 using System.IO;
 
@@ -24,6 +25,8 @@ namespace SchacoPDFViewer.ViewModel
         public MainViewModel()
         {
             Initialize();
+            IniMsgMethod();
+           
         }
 
         string _FolderPath;
@@ -51,6 +54,20 @@ namespace SchacoPDFViewer.ViewModel
             {
                 _Nodes = value;
                 RaisePropertyChanged(() => Nodes);
+            }
+        }
+
+        MyTreeNode _SeletedNode;
+        public MyTreeNode SeletedNode
+        {
+            get
+            {
+                return _SeletedNode;
+            }
+            set
+            {
+                _SeletedNode = value;
+                RaisePropertyChanged(() => SeletedNode);
             }
         }
 
@@ -106,6 +123,19 @@ namespace SchacoPDFViewer.ViewModel
             DirectoryInfo info = new DirectoryInfo(FolderPath);
             GetNodes(info, ref node);
             Nodes = new ObservableCollection<MyTreeNode>(node.ChildNodes);
+        }
+
+        public void IniMsgMethod()
+        {
+            Messenger.Default.Register<object>(this, MvvmMessage.MainView_SelectedChange, SelectedChange);
+        }
+
+        void SelectedChange(object o)
+        {
+            if (o is MyTreeNode)
+            {
+                SeletedNode = o as MyTreeNode;
+            }
         }
     }
 }

@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Cells, Version=19.3.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resource\Aspose.Cells.dll</HintPath>
+    </Reference>
     <Reference Include="CommonServiceLocator, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.2.0.2\lib\net40\CommonServiceLocator.dll</HintPath>
     </Reference>
@@ -57,6 +61,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resource\MouseKeyboardActivityMonitor.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -79,20 +86,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Default.cs" />
-    <Compile Include="Helper.cs" />
-    <Compile Include="IEecelToPDF.cs" />
-    <Compile Include="IPrintPDF.cs" />
-    <Compile Include="Settings.xaml.cs">
+    <Compile Include="Base\Default.cs" />
+    <Compile Include="Base\Helper.cs" />
+    <Compile Include="Model\AsposeE2P.cs" />
+    <Compile Include="Model\IEecelToPDF.cs" />
+    <Compile Include="Model\IPrintPDF.cs" />
+    <Compile Include="Base\MvvmMessage.cs" />
+    <Compile Include="View\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TreeNodeModel.cs" />
-    <Compile Include="TreeType.cs" />
-    <Compile Include="TreeTypeToImageSource.cs" />
+    <Compile Include="Base\TreeNodeModel.cs" />
+    <Compile Include="Base\TreeType.cs" />
+    <Compile Include="Base\TreeTypeToImageSource.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Page Include="MainWindow.xaml">
+    <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -100,11 +109,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Settings.xaml">
+    <Page Include="View\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -140,9 +149,14 @@
   <ItemGroup>
     <Content Include="bin\Debug\libmupdf.dll" />
     <Content Include="bin\Debug\libmupdf_x64.dll" />
+    <Content Include="Resource\Aspose.Cells.dll" />
+    <Resource Include="Resource\Aspose.Cells.xml" />
     <Content Include="Resource\MoonPdfLib.dll" />
     <Content Include="Resource\MouseKeyboardActivityMonitor.dll" />
     <Resource Include="Resource\other.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
