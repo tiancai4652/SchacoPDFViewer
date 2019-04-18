@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SchacoPDFViewer
 {
-    public interface IExcelToPDF
+    public interface IPrintPDF
     {
 
     }

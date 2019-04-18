@@ -1,7 +1,11 @@
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Threading;
+using System.Windows.Input;
 
 namespace SchacoPDFViewer.ViewModel
 {
@@ -19,14 +23,20 @@ namespace SchacoPDFViewer.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
+        public IExcelToPDF ExcelToPDF { get; set; }
+        
+
+        public ICommand ShowCommand { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public MainViewModel()
+        public MainViewModel(IExcelToPDF excelToPDF)
         {
-            Initialize();
+            //Initialize();
             IniMsgMethod();
-           
+            ShowCommand = new RelayCommand(LoadSelectedPDF);
+            ExcelToPDF = excelToPDF;
         }
 
         string _FolderPath;
@@ -40,6 +50,20 @@ namespace SchacoPDFViewer.ViewModel
             {
                 _FolderPath = value;
                 RaisePropertyChanged(() => FolderPath);
+            }
+        }
+
+        bool _IsShowProgressCircle = false;
+        public bool IsShowProgressCircle
+        {
+            get
+            {
+                return _IsShowProgressCircle;
+            }
+            set
+            {
+                _IsShowProgressCircle = value;
+                RaisePropertyChanged(() => IsShowProgressCircle);
             }
         }
 
@@ -71,11 +95,9 @@ namespace SchacoPDFViewer.ViewModel
             }
         }
 
-        void Initialize()
+        public void Initialize()
         {
-            FolderPath = Default.DefaultFolderPath;
             NodesLoad();
-
         }
 
         void GetNodes(DirectoryInfo info,ref MyTreeNode node)
@@ -95,8 +117,12 @@ namespace SchacoPDFViewer.ViewModel
                     {
                         dicTree.Type = TreeType.Unknown;
                     }
-                    dicTree.FullName = file.FullName;
-                    dicTree.Name = file.Name;
+                    dicTree.FullExcelFileName = file.FullName;
+                    dicTree.ExcelFileName = file.Name;
+                    string dir = Path.GetDirectoryName(file.FullName);
+                    string filename = Path.GetFileName(dicTree.FullExcelFileName);
+                    string pdfFlename = Path.ChangeExtension(filename,".PDF");
+                    dicTree.FullPDFFileName = dir + "\\" + pdfFlename;
                     node.ChildNodes.Add(dicTree);
                 }
             }
@@ -109,8 +135,8 @@ namespace SchacoPDFViewer.ViewModel
                 {
                     MyTreeNode dicTree = new MyTreeNode();
                     dicTree.Type = TreeType.Folder;
-                    dicTree.FullName = dic.FullName;
-                    dicTree.Name = dic.Name;
+                    dicTree.FullExcelFileName = dic.FullName;
+                    dicTree.ExcelFileName = dic.Name;
                     GetNodes(dic,ref dicTree);
                     node.ChildNodes.Add(dicTree);
                 }
@@ -128,6 +154,7 @@ namespace SchacoPDFViewer.ViewModel
         public void IniMsgMethod()
         {
             Messenger.Default.Register<object>(this, MvvmMessage.MainView_SelectedChange, SelectedChange);
+
         }
 
         void SelectedChange(object o)
@@ -136,6 +163,30 @@ namespace SchacoPDFViewer.ViewModel
             {
                 SeletedNode = o as MyTreeNode;
             }
+        }
+
+        void LoadSelectedPDF()
+        {
+            try
+            {
+                if (SeletedNode.Type == TreeType.ExcelFlie)
+                {
+                    IsShowProgressCircle = true;
+                    Thread x = new Thread(() =>
+                    {
+
+                        ExcelToPDF.TurnToPDF(SeletedNode.FullExcelFileName, SeletedNode.FullPDFFileName);
+                        Messenger.Default.Send<object>(SeletedNode.FullPDFFileName, MvvmMessage.MainView_ShowSelectedPDF);
+                        IsShowProgressCircle = false;
+                    });
+                    x.Start();
+                }
+            }
+            catch(Exception ex)
+            {
+                MyLogger.LoggerInstance.Error(ex);
+            }
+          
         }
     }
 }

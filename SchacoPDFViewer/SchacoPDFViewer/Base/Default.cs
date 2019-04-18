@@ -12,8 +12,9 @@ namespace SchacoPDFViewer
             get
             {
                 return @"G:\WorkCode\ACal_Tempture\Cal2.Wpf.App\bin\Debug\Templates";
-            }
-            
+            } 
         }
+
+        public static string TempPDFFolder = "ShacoPDFTempFolder";
     }
 }

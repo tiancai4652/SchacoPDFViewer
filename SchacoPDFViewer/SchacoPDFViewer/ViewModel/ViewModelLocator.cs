@@ -15,7 +15,7 @@
 using CommonServiceLocator;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
-
+using System;
 
 namespace SchacoPDFViewer.ViewModel
 {
@@ -45,13 +45,17 @@ namespace SchacoPDFViewer.ViewModel
 
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<SettingsViewModel>();
+            //SimpleIoc.Default.Register<IExcelToPDF,AsposeE2P>();
         }
 
         public MainViewModel Main
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<MainViewModel>();
+                MainViewModel mvm= ServiceLocator.Current.GetInstance<MainViewModel>();
+                mvm.FolderPath = Settings.FolderPath;
+                mvm.Initialize();
+                return mvm;
             }
         }
 
@@ -66,6 +70,19 @@ namespace SchacoPDFViewer.ViewModel
         public static void Cleanup()
         {
             // TODO Clear the ViewModels
+            try
+            {
+                SimpleIoc.Default.Unregister<IExcelToPDF>();
+            }
+            catch(Exception ex)
+            { }
+
+            try
+            {
+                SimpleIoc.Default.Unregister<IPrintPDF>();
+            }
+            catch (Exception ex)
+            { }
         }
     }
 }

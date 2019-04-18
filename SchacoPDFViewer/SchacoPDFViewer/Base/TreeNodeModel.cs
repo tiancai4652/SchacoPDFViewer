@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -9,31 +10,45 @@ namespace SchacoPDFViewer
 {
     public class MyTreeNode: ObservableObject
     {
-        string _FullName = "";
-        public string FullName
+        string _FullExcelFileName = "";
+        public string FullExcelFileName
         {
             get
             {
-                return _FullName;
+                return _FullExcelFileName;
             }
             set
             {
-                _FullName = value;
-                RaisePropertyChanged(() => FullName);
+                _FullExcelFileName = value;
+                RaisePropertyChanged(() => FullExcelFileName);
             }
         }
 
-        string _Name;
-        public string Name
+        string _ExcelFileName;
+        public string ExcelFileName
         {
             get
             {
-                return _Name;
+                return _ExcelFileName;
             }
             set
             {
-                _Name = value;
-                RaisePropertyChanged(() => Name);
+                _ExcelFileName = value;
+                RaisePropertyChanged(() => ExcelFileName);
+            }
+        }
+
+        string _FullPDFFileName;
+        public string FullPDFFileName
+        {
+            get
+            {
+                return _FullPDFFileName;
+            }
+            set
+            {
+                _FullPDFFileName = value;
+                RaisePropertyChanged(() => FullPDFFileName);
             }
         }
 

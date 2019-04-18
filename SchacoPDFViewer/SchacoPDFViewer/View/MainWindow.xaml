@@ -7,30 +7,42 @@
         xmlns:local="clr-namespace:SchacoPDFViewer"
         DataContext="{Binding Source={StaticResource Locator}, Path=Main}"
         mc:Ignorable="d"
+                      xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
                       xmlns:mpp="clr-namespace:MoonPdfLib;assembly=MoonPdfLib"
-                      Title="MainWindow" Height="450" Width="800">
+                           xmlns:command="http://www.galasoft.ch/mvvmlight"
+                      Title="MainWindow" Height="450" Width="1000" WindowState="Maximized" >
     <controls:MetroWindow.Resources>
         <local:TreeTypeToImageSource x:Key="TreeTypeToImageSource"></local:TreeTypeToImageSource>
+        <local:BoolToVisible x:Key="BoolToVisible"></local:BoolToVisible>
+        <local:BoolToUnBool x:Key="BoolToUnBool"></local:BoolToUnBool>
+
     </controls:MetroWindow.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="400"/>
             <ColumnDefinition Width="3"/>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="3"/>
-            <ColumnDefinition/>
+            <!--<ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="3"/>-->
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
       
         <Grid Grid.Column="0">
             <!--TreeViewItem.Selected="TreeView_SelectedItemChanged"-->
             <TreeView HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" 
                       ItemsSource="{Binding Nodes}"  SelectedItemChanged="TreeView_SelectedItemChanged_1"
+                   
                       >
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="PreviewMouseDoubleClick" >
+                        <command:EventToCommand Command="{Binding ShowCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding ChildNodes,UpdateSourceTrigger=PropertyChanged}" >
                         <StackPanel Orientation="Horizontal">
                             <Image Margin="3" Source="{Binding Type,Converter={StaticResource TreeTypeToImageSource}}" Stretch="Fill" Width="20" Height="20" ></Image>
-                            <TextBlock Margin="3" VerticalAlignment="Center" FontSize="14" Text="{Binding Name}" ></TextBlock>
+                            <TextBlock Margin="3" VerticalAlignment="Center" FontSize="14" Text="{Binding ExcelFileName}" ></TextBlock>
                         </StackPanel>
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
@@ -42,10 +54,43 @@
             </TreeView>
         </Grid>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Background="Gray" Width="1" />
-        <Grid Grid.Column="2"></Grid>
-        <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch" Background="Gray" Width="1" />
-        <Grid Grid.Column="4">
-            <mpp:MoonPdfPanel  Background = " LightGray "   ViewType = "SinglePage"   PageMargin = "5"  AllowDrop = "True" />
+        <!--<Grid Grid.Column="2"></Grid>
+        <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch" Background="Gray" Width="1" />-->
+        <Grid Grid.Column="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Border Background="#f0f0f0">
+                    <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Button Content="文件" Width="50" Click="FileButton_Click" Margin="5,5"/>
+
+                        <Button Content="放大" Width="50" Click="ZoomInButton_Click" Margin="0,5"/>
+
+                        <Button Content="缩小" Width="50" Click="ZoomOutButton_Click" Margin="5,5"/>
+
+                        <Button Content="100%" Width="50" Click="NormalButton_Click" Margin="0,5"/>
+
+                        <Button Content="整页" Width="50" Click="FitToHeightButton_Click" Margin="5,5"/>
+
+                        <Button Content="单页" Width="50" Click="SinglePageButton_Click" Margin="0,5"/>
+
+                        <Button Content="双页" Width="50" Click="FacingButton_Click" Margin="5,5"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#d3d3d3" Grid.Row="1">
+                    <mpp:MoonPdfPanel IsEnabled="{Binding IsShowProgressCircle,Converter={StaticResource BoolToUnBool}}"  x:Name="moonPdfPanel" Background="LightGray" ViewType="SinglePage" PageRowDisplay="ContinuousPageRows" PageMargin="0,2,4,2" AllowDrop="True"/>
+                </Border>
+            </Grid>
+            <Grid>
+                <controls:ProgressRing Grid.Column="1"
+                                       IsActive="True"
+                                       Width="40"
+                                       Height="40" Visibility="{Binding IsShowProgressCircle,Converter={StaticResource BoolToVisible}}"/>
+            </Grid>
         </Grid>
     </Grid>
 </controls:MetroWindow>
