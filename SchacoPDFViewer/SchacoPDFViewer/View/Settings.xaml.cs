@@ -1,8 +1,10 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using SchacoPDFViewer.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -25,11 +27,31 @@ namespace SchacoPDFViewer
         {
             InitializeComponent();
             Messenger.Default.Register<string>(this, MvvmMessage.SeetingView_ShowMsg, ShowMsg);
+            Messenger.Default.Register<string>(this, MvvmMessage.SeetingView_ShowMain, ShowMain);
         }
 
         public void ShowMsg(string msg)
         {
             DialogManager.ShowMessageAsync(this, "提示", msg);
+        }
+
+        public void ShowMain(string x)
+        {
+            try
+            {
+                Dispatcher.Invoke(new Action(() =>
+                {
+                    MainWindow v = new MainWindow();
+                    v.ShowDialog();
+                }));
+            }
+            catch (Exception ex)
+            { }
+            finally
+            {
+                ViewModelLocator.Cleanup();
+                Messenger.Default.Send<string>("", MvvmMessage.SeetingView_LoadedDIR);
+            }
         }
     }
 }

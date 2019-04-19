@@ -53,8 +53,7 @@ namespace SchacoPDFViewer.ViewModel
             get
             {
                 MainViewModel mvm= ServiceLocator.Current.GetInstance<MainViewModel>();
-                mvm.FolderPath = Settings.FolderPath;
-                mvm.Initialize();
+                mvm.Nodes = Settings.Nodes;
                 return mvm;
             }
         }

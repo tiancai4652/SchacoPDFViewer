@@ -9,11 +9,12 @@ using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Text;
+using System.Threading;
 using System.Windows.Input;
 
 namespace SchacoPDFViewer.ViewModel
 {
-    public class SettingsViewModel: ViewModelBase
+    public class SettingsViewModel : ViewModelBase
     {
         ObservableCollection<ExeclToPdfType> _E2PCollection = new ObservableCollection<ExeclToPdfType>() { ExeclToPdfType.Aspose, ExeclToPdfType.Office };
         public ObservableCollection<ExeclToPdfType> E2PCollection
@@ -71,6 +72,20 @@ namespace SchacoPDFViewer.ViewModel
             }
         }
 
+        ObservableCollection<MyTreeNode> _Nodes = new ObservableCollection<MyTreeNode>();
+        public ObservableCollection<MyTreeNode> Nodes
+        {
+            get
+            {
+                return _Nodes;
+            }
+            set
+            {
+                _Nodes = value;
+                RaisePropertyChanged(() => Nodes);
+            }
+        }
+
         public ICommand NextCommand { get; set; }
         void Next()
         {
@@ -116,9 +131,26 @@ namespace SchacoPDFViewer.ViewModel
                     default:
                         break;
                 }
-                MainWindow v = new MainWindow();
-                v.ShowDialog();
-                ViewModelLocator.Cleanup();
+                IsShowProgressCircle = true;
+
+                Thread x = new Thread(() =>
+                {
+                    try
+                    {
+                        Nodes = Helper.NodesLoad(FolderPath);
+                        Messenger.Default.Send<string>("", MvvmMessage.SeetingView_ShowMain);
+                        IsShowProgressCircle = false;
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                    finally
+                    {
+                        IsShowProgressCircle = false;
+                    }
+                });
+                x.Start();
             }
             catch (Exception ex)
             {
@@ -126,10 +158,12 @@ namespace SchacoPDFViewer.ViewModel
             }
             finally
             {
-                if (Directory.Exists(FolderPath + "\\" + Default.TempPDFFolder))
-                {
-                    Directory.Delete(FolderPath + "\\" + Default.TempPDFFolder);
-                }
+              
+                //if (Directory.Exists(FolderPath + "\\" + Default.TempPDFFolder))
+                //{
+                //    Directory.Delete(FolderPath + "\\" + Default.TempPDFFolder);
+                //}
+
             }
         }
 
@@ -142,7 +176,7 @@ namespace SchacoPDFViewer.ViewModel
             {
                 if (string.IsNullOrEmpty(dialog.SelectedPath))
                 {
-                    Messenger.Default.Send<string>("选择的文件夹不能为空",MvvmMessage.SeetingView_ShowMsg);
+                    Messenger.Default.Send<string>("选择的文件夹不能为空", MvvmMessage.SeetingView_ShowMsg);
                     return;
                 }
 
@@ -168,9 +202,32 @@ namespace SchacoPDFViewer.ViewModel
         {
             NextCommand = new RelayCommand(Next);
             OpenDialogCommand = new RelayCommand(OpenDialog);
+
+            Messenger.Default.Register<string>(this, MvvmMessage.SeetingView_LoadedDIR, DeleteTemp);
+
         }
 
+        bool _IsShowProgressCircle = false;
+        public bool IsShowProgressCircle
+        {
+            get
+            {
+                return _IsShowProgressCircle;
+            }
+            set
+            {
+                _IsShowProgressCircle = value;
+                RaisePropertyChanged(() => IsShowProgressCircle);
+            }
+        }
 
+        void DeleteTemp(string xx)
+        {
+            if (Directory.Exists(FolderPath + "\\" + Default.TempPDFFolder))
+            {
+                Directory.Delete(FolderPath + "\\" + Default.TempPDFFolder);
+            }
+        }
 
     }
 
@@ -185,5 +242,5 @@ namespace SchacoPDFViewer.ViewModel
         Aspose,
         SumatraPDF
     }
-     
+
 }

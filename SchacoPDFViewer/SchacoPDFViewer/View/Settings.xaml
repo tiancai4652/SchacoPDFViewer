@@ -8,7 +8,23 @@
         xmlns:local="clr-namespace:SchacoPDFViewer"
         mc:Ignorable="d"
         Title="Settings" Height="300" Width="800"  WindowStartupLocation="CenterScreen" >
+    <controls:MetroWindow.Resources>
+        <local:BoolToVisible x:Key="BoolToVisible"></local:BoolToVisible>
+        <local:BoolToUnBool x:Key="BoolToUnBool"></local:BoolToUnBool>
+    </controls:MetroWindow.Resources>
     <Grid>
+        <Grid Visibility="{Binding IsShowProgressCircle,Converter={StaticResource BoolToVisible}}">
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel Orientation="Vertical">
+                <controls:ProgressRing Grid.Column="1"
+                                       IsActive="True"
+                                       Width="40"
+                                       Height="40" FontSize="14" />
+                    <TextBlock FontFamily="Segoe Print" FontWeight="Bold" >Reading directory information...</TextBlock>
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <Grid IsEnabled="{Binding IsShowProgressCircle,Converter={StaticResource BoolToUnBool}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
@@ -39,5 +55,6 @@
         <Grid Grid.Row="2">
             <Button Command="{Binding NextCommand}" Width="200" HorizontalAlignment="Right" Margin="20,5">Next</Button>
         </Grid>
+    </Grid>
     </Grid>
 </controls:MetroWindow>
