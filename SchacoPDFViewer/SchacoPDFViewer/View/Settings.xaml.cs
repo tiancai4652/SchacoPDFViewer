@@ -24,12 +24,30 @@ namespace SchacoPDFViewer
         public Settings()
         {
             InitializeComponent();
-            Messenger.Default.Register<string>(this, MvvmMessage.SeetingView_ShowMsg, ShowMsg);
+            IniMsgMethod();
         }
 
-        public void ShowMsg(string msg)
+        public void IniMsgMethod()
         {
-            DialogManager.ShowMessageAsync(this, "提示", msg);
+            Messenger.Default.Register<SeetingView_ShowMsgEventArgs>(this, ShowMsg);
+        }
+
+        public void UnIniMsgMethod()
+        {
+            Messenger.Default.Unregister<SeetingView_ShowMsgEventArgs>(this);
+            Messenger.Default.Send(this, new SettingView_UnregisterVM());
+            Messenger.Default.Unregister<SettingView_UnregisterVM>(this);
+        }
+
+
+        public void ShowMsg(SeetingView_ShowMsgEventArgs agrs)
+        {
+            DialogManager.ShowMessageAsync(this, "提示", agrs.Msg);
+        }
+
+        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            UnIniMsgMethod();
         }
     }
 }

@@ -37,6 +37,7 @@ namespace SchacoPDFViewer.ViewModel
             IniMsgMethod();
             ShowCommand = new RelayCommand(LoadSelectedPDF);
             ExcelToPDF = excelToPDF;
+            Messenger.Default.Register<MainView_UnregisterVM>(this, UnIniMsgMethod);
         }
 
         string _FolderPath;
@@ -153,16 +154,17 @@ namespace SchacoPDFViewer.ViewModel
 
         public void IniMsgMethod()
         {
-            Messenger.Default.Register<object>(this, MvvmMessage.MainView_SelectedChange, SelectedChange);
-
+            Messenger.Default.Register<MainView_SelectedChangeEventArgs>(this, SelectedChange);
         }
 
-        void SelectedChange(object o)
+        public void UnIniMsgMethod(MainView_UnregisterVM args)
         {
-            if (o is MyTreeNode)
-            {
-                SeletedNode = o as MyTreeNode;
-            }
+            Messenger.Default.Unregister<MainView_SelectedChangeEventArgs>(this);
+        }
+
+        void SelectedChange(MainView_SelectedChangeEventArgs o)
+        {
+            SeletedNode = o.MyTreeNode;
         }
 
         void LoadSelectedPDF()
@@ -176,7 +178,7 @@ namespace SchacoPDFViewer.ViewModel
                     {
 
                         ExcelToPDF.TurnToPDF(SeletedNode.FullExcelFileName, SeletedNode.FullPDFFileName);
-                        Messenger.Default.Send<object>(SeletedNode.FullPDFFileName, MvvmMessage.MainView_ShowSelectedPDF);
+                        Messenger.Default.Send( new MainView_ShowSelectedPDFEventArgs() { PDFPath = SeletedNode.FullPDFFileName });
                         IsShowProgressCircle = false;
                     });
                     x.Start();

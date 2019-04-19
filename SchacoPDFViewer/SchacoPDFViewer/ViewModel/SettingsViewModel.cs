@@ -80,7 +80,7 @@ namespace SchacoPDFViewer.ViewModel
 
                 if (!Directory.Exists(FolderPath))
                 {
-                    Messenger.Default.Send<string>("不存在该路径!", MvvmMessage.SeetingView_ShowMsg);
+                    Messenger.Default.Send(new SeetingView_ShowMsgEventArgs() {  Msg= "不存在该路径!" });
                     return;
                 }
                 if (!Directory.Exists(FolderPath + "\\" + Default.TempPDFFolder))
@@ -142,7 +142,7 @@ namespace SchacoPDFViewer.ViewModel
             {
                 if (string.IsNullOrEmpty(dialog.SelectedPath))
                 {
-                    Messenger.Default.Send<string>("选择的文件夹不能为空",MvvmMessage.SeetingView_ShowMsg);
+                    Messenger.Default.Send(new SeetingView_ShowMsgEventArgs() { Msg = "选择的文件夹不能为空!" });
                     return;
                 }
 
@@ -168,8 +168,13 @@ namespace SchacoPDFViewer.ViewModel
         {
             NextCommand = new RelayCommand(Next);
             OpenDialogCommand = new RelayCommand(OpenDialog);
+            Messenger.Default.Register<SettingView_UnregisterVM>(this, Unregister);
         }
 
+        void Unregister(SettingView_UnregisterVM args)
+        {
+
+        }
 
 
     }

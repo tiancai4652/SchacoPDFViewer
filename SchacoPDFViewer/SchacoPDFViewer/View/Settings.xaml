@@ -7,7 +7,7 @@
          DataContext="{Binding Source={StaticResource Locator}, Path=Settings}"
         xmlns:local="clr-namespace:SchacoPDFViewer"
         mc:Ignorable="d"
-        Title="Settings" Height="300" Width="800"  WindowStartupLocation="CenterScreen" >
+        Title="Settings" Height="300" Width="800"  WindowStartupLocation="CenterScreen" Closing="MetroWindow_Closing" >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>

@@ -10,7 +10,7 @@
                       xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
                       xmlns:mpp="clr-namespace:MoonPdfLib;assembly=MoonPdfLib"
                            xmlns:command="http://www.galasoft.ch/mvvmlight"
-                      Title="MainWindow" Height="450" Width="1000" WindowState="Maximized" >
+                      Title="MainWindow" Height="450" Width="1000" WindowState="Maximized" Closing="MetroWindow_Closing" >
     <controls:MetroWindow.Resources>
         <local:TreeTypeToImageSource x:Key="TreeTypeToImageSource"></local:TreeTypeToImageSource>
         <local:BoolToVisible x:Key="BoolToVisible"></local:BoolToVisible>

@@ -25,7 +25,21 @@ namespace SchacoPDFViewer
         public MainWindow()
         {
             InitializeComponent();
-            Messenger.Default.Register<object>(this,MvvmMessage.MainView_ShowSelectedPDF,ShowPDf);
+            IniMsgMethod();
+        }
+
+        public void IniMsgMethod()
+        {
+            Messenger.Default.Register<MainView_ShowSelectedPDFEventArgs>(this, ShowPDf);
+            
+        }
+
+        public void UnIniMsgMethod()
+        {
+            Messenger.Default.Unregister<MainView_ShowSelectedPDFEventArgs>(this);
+            Messenger.Default.Send(this, new MainView_UnregisterVM());
+            Messenger.Default.Unregister<MainView_UnregisterVM>(this);
+
         }
 
         //private void TreeView_SelectedItemChanged(object sender, RoutedEventArgs e)
@@ -35,25 +49,22 @@ namespace SchacoPDFViewer
 
         private void TreeView_SelectedItemChanged_1(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            Messenger.Default.Send<object>((sender as TreeView).SelectedItem, MvvmMessage.MainView_SelectedChange);
+            Messenger.Default.Send( new MainView_SelectedChangeEventArgs() {MyTreeNode= (sender as TreeView).SelectedItem as MyTreeNode});
         }
 
-        void ShowPDf(object path)
+        void ShowPDf(MainView_ShowSelectedPDFEventArgs args)
         {
-            if (path is string)
+            try
             {
-                try
+                Dispatcher.Invoke(new Action(() =>
                 {
-                    Dispatcher.Invoke(new Action(() =>
-                    {
-                        moonPdfPanel.OpenFile((string)path);
-                        _isLoaded = true;
-                    }));
-                }
-                catch (Exception ex)
-                {
-                    _isLoaded = false;
-                }
+                    moonPdfPanel.OpenFile(args.PDFPath);
+                    _isLoaded = true;
+                }));
+            }
+            catch (Exception ex)
+            {
+                _isLoaded = false;
             }
         }
 
@@ -118,6 +129,9 @@ namespace SchacoPDFViewer
             moonPdfPanel.ViewType = MoonPdfLib.ViewType.SinglePage;
         }
 
-      
+        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            UnIniMsgMethod();
+        }
     }
 }

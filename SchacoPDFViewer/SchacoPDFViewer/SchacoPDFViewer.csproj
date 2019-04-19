@@ -101,10 +101,15 @@
     <Compile Include="Base\BoolToVisible.cs" />
     <Compile Include="Base\Default.cs" />
     <Compile Include="Base\Helper.cs" />
+    <Compile Include="Base\Message\MainView_SelectedChangeEventArgs.cs" />
+    <Compile Include="Base\Message\MainView_ShowSelectedPDFEventArgs.cs" />
+    <Compile Include="Base\Message\MainView_UnregisterVM.cs" />
+    <Compile Include="Base\Message\SeetingView_ShowMsgEventArgs.cs" />
+    <Compile Include="Base\Message\SettingView_UnregisterVM.cs" />
     <Compile Include="Model\AsposeE2P.cs" />
     <Compile Include="Model\IEecelToPDF.cs" />
     <Compile Include="Model\IPrintPDF.cs" />
-    <Compile Include="Base\MvvmMessage.cs" />
+    <Compile Include="Base\Message\MvvmMessage.cs" />
     <Compile Include="MyLogger.cs" />
     <Compile Include="View\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
