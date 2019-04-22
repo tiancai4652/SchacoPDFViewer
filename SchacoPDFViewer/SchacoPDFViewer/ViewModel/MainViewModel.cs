@@ -34,10 +34,10 @@ namespace SchacoPDFViewer.ViewModel
         public MainViewModel(IExcelToPDF excelToPDF)
         {
             //Initialize();
-            IniMsgMethod();
+            Register();
             ShowCommand = new RelayCommand(LoadSelectedPDF);
             ExcelToPDF = excelToPDF;
-            Messenger.Default.Register<MainView_UnregisterVM>(this, UnIniMsgMethod);
+            
         }
 
         string _FolderPath;
@@ -152,14 +152,16 @@ namespace SchacoPDFViewer.ViewModel
             Nodes = new ObservableCollection<MyTreeNode>(node.ChildNodes);
         }
 
-        public void IniMsgMethod()
+        public void Register()
         {
             Messenger.Default.Register<MainView_SelectedChangeEventArgs>(this, SelectedChange);
+            Messenger.Default.Register<MainView_UnregisterVM>(this, (t)=> UnRegister());
         }
 
-        public void UnIniMsgMethod(MainView_UnregisterVM args)
+        public void UnRegister()
         {
             Messenger.Default.Unregister<MainView_SelectedChangeEventArgs>(this);
+            Messenger.Default.Unregister<MainView_UnregisterVM>(this);
         }
 
         void SelectedChange(MainView_SelectedChangeEventArgs o)

@@ -71,13 +71,33 @@ namespace SchacoPDFViewer.ViewModel
             }
         }
 
+        string _FolderPath = Default.DefaultFolderPath;
+        public string FolderPath
+        {
+            get
+            {
+                return _FolderPath;
+            }
+            set
+            {
+                _FolderPath = value;
+                RaisePropertyChanged(() => FolderPath);
+            }
+        }
+
+        public SettingsViewModel()
+        {
+            NextCommand = new RelayCommand(Next);
+            OpenDialogCommand = new RelayCommand(OpenDialog);
+            Register();
+        }
+
         public ICommand NextCommand { get; set; }
         void Next()
         {
 
             try
             {
-
                 if (!Directory.Exists(FolderPath))
                 {
                     Messenger.Default.Send(new SeetingView_ShowMsgEventArgs() {  Msg= "不存在该路径!" });
@@ -150,45 +170,19 @@ namespace SchacoPDFViewer.ViewModel
             }
         }
 
-        string _FolderPath = Default.DefaultFolderPath;
-        public string FolderPath
+        void Unregister()
         {
-            get
-            {
-                return _FolderPath;
-            }
-            set
-            {
-                _FolderPath = value;
-                RaisePropertyChanged(() => FolderPath);
-            }
+            Messenger.Default.Unregister<SettingView_UnregisterVM>(this);
         }
 
-        public SettingsViewModel()
+        void Register()
         {
-            NextCommand = new RelayCommand(Next);
-            OpenDialogCommand = new RelayCommand(OpenDialog);
-            Messenger.Default.Register<SettingView_UnregisterVM>(this, Unregister);
+            Messenger.Default.Register<SettingView_UnregisterVM>(this, (t)=> Unregister());
         }
-
-        void Unregister(SettingView_UnregisterVM args)
-        {
-
-        }
-
-
     }
 
-    public enum ExeclToPdfType
-    {
-        Aspose,
-        Office
-    }
+    
 
-    public enum PrintPdfType
-    {
-        Aspose,
-        SumatraPDF
-    }
+   
      
 }

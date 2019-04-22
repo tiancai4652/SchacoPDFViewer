@@ -99,6 +99,8 @@
     </ApplicationDefinition>
     <Compile Include="Base\BoolToUnBool.cs" />
     <Compile Include="Base\BoolToVisible.cs" />
+    <Compile Include="Base\ExeclToPdfType.cs" />
+    <Compile Include="Base\PrintPdfType.cs" />
     <Compile Include="Base\Default.cs" />
     <Compile Include="Base\Helper.cs" />
     <Compile Include="Base\Message\MainView_SelectedChangeEventArgs.cs" />

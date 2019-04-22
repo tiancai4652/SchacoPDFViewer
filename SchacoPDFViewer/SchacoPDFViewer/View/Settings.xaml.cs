@@ -24,15 +24,15 @@ namespace SchacoPDFViewer
         public Settings()
         {
             InitializeComponent();
-            IniMsgMethod();
+            Register();
         }
 
-        public void IniMsgMethod()
+        public void Register()
         {
             Messenger.Default.Register<SeetingView_ShowMsgEventArgs>(this, ShowMsg);
         }
 
-        public void UnIniMsgMethod()
+        public void Unregister()
         {
             Messenger.Default.Unregister<SeetingView_ShowMsgEventArgs>(this);
             Messenger.Default.Send(this, new SettingView_UnregisterVM());
@@ -47,7 +47,7 @@ namespace SchacoPDFViewer
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            UnIniMsgMethod();
+            Unregister();
         }
     }
 }
