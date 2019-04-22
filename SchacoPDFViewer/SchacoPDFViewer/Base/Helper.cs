@@ -20,5 +20,15 @@ namespace SchacoPDFViewer
             }
             return false;
         }
+
+        public static bool CheckWhetherPDFFile(string FileName)
+        {
+            var extense = Path.GetExtension(FileName);
+            if (extense.ToLower().Equals(".pdf"))
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

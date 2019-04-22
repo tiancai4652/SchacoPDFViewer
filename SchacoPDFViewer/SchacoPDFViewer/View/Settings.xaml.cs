@@ -30,6 +30,8 @@ namespace SchacoPDFViewer
         public void Register()
         {
             Messenger.Default.Register<SeetingView_ShowMsgEventArgs>(this, ShowMsg);
+            Messenger.Default.Register<SettingView_HideEventArgs>(this, (x)=> { this.Hide(); });
+            Messenger.Default.Register<SettingView_ShowFromHideEventArgs>(this, (x) => { this.Show(); });
         }
 
         public void Unregister()
@@ -37,6 +39,8 @@ namespace SchacoPDFViewer
             Messenger.Default.Unregister<SeetingView_ShowMsgEventArgs>(this);
             Messenger.Default.Send(this, new SettingView_UnregisterVM());
             Messenger.Default.Unregister<SettingView_UnregisterVM>(this);
+            Messenger.Default.Unregister<SettingView_HideEventArgs>(this);
+            Messenger.Default.Unregister<SettingView_ShowFromHideEventArgs>(this);
         }
 
 

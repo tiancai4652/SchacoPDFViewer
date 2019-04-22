@@ -5,11 +5,8 @@ using System.Text;
 
 namespace SchacoPDFViewer
 {
-    public enum TreeType
+    public class SettingView_ShowFromHideEventArgs
     {
-        Folder,
-        ExcelFlie,
-        Pdf,
-        Unknown
+
     }
 }

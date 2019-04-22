@@ -31,7 +31,6 @@ namespace SchacoPDFViewer
         public void Register()
         {
             Messenger.Default.Register<MainView_ShowSelectedPDFEventArgs>(this, ShowPDf);
-            
         }
 
         public void Unregister()

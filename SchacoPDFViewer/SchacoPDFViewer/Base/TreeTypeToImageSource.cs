@@ -24,6 +24,19 @@ namespace SchacoPDFViewer
             }
         }
 
+        ImageSource _pdfImage;
+        private ImageSource pdfImage
+        {
+            get
+            {
+                if (_pdfImage == null)
+                {
+                    _pdfImage = new BitmapImage(new Uri("/Resource/pdf.png", UriKind.Relative));
+                }
+                return _pdfImage;
+            }
+        }
+
         ImageSource _folderImage;
         private ImageSource folderImage
         {
@@ -57,6 +70,10 @@ namespace SchacoPDFViewer
                 if ((TreeType)value == TreeType.ExcelFlie)
                 {
                     return excelImage;
+                }
+                else if ((TreeType)value == TreeType.Pdf)
+                {
+                    return pdfImage;
                 }
                 else if ((TreeType)value == TreeType.Folder)
                 {

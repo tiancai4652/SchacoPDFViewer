@@ -25,10 +25,21 @@
             <ColumnDefinition Width="3"/>-->
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
-      
         <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
             <!--TreeViewItem.Selected="TreeView_SelectedItemChanged"-->
-            <TreeView HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" 
+            <Grid>
+                <StackPanel Orientation="Horizontal">
+                    <Button Width="100" Margin="5" Command="{Binding CreatAllPDFWithMultiThreadCommand}">一键生成所有PDF</Button>
+                    <Button Width="100" Margin="5" Command="{Binding DeleteAllPDFCommand}">一键删除所有PDF</Button>
+                    <Button Width="100" Margin="5" Command="{Binding RefreshCommand}">刷新</Button>
+                  
+                </StackPanel>
+            </Grid>
+            <TreeView HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Row="1"
                       ItemsSource="{Binding Nodes}"  SelectedItemChanged="TreeView_SelectedItemChanged_1"
                    
                       >
@@ -41,7 +52,7 @@
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding ChildNodes,UpdateSourceTrigger=PropertyChanged}" >
                         <StackPanel Orientation="Horizontal">
-                            <Image Margin="3" Source="{Binding Type,Converter={StaticResource TreeTypeToImageSource}}" Stretch="Fill" Width="20" Height="20" ></Image>
+                            <Image Margin="3" Source="{Binding Type,Converter={StaticResource TreeTypeToImageSource}}" Stretch="Fill" Width="25" Height="25" ></Image>
                             <TextBlock Margin="3" VerticalAlignment="Center" FontSize="14" Text="{Binding ExcelFileName}" ></TextBlock>
                         </StackPanel>
                     </HierarchicalDataTemplate>

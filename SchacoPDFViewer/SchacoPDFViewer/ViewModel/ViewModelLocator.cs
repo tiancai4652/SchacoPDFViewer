@@ -70,11 +70,16 @@ namespace SchacoPDFViewer.ViewModel
         public static void Cleanup()
         {
             // TODO Clear the ViewModels
+          
+        }
+
+        public static void CleanIOC()
+        {
             try
             {
                 SimpleIoc.Default.Unregister<IExcelToPDF>();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             { }
 
             try

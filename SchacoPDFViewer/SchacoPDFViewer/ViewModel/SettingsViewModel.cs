@@ -137,8 +137,10 @@ namespace SchacoPDFViewer.ViewModel
                         break;
                 }
                 MainWindow v = new MainWindow();
+                Messenger.Default.Send<SettingView_HideEventArgs>(new SettingView_HideEventArgs());
                 v.ShowDialog();
-                ViewModelLocator.Cleanup();
+                ViewModelLocator.CleanIOC();
+                Messenger.Default.Send<SettingView_ShowFromHideEventArgs>(new SettingView_ShowFromHideEventArgs());
             }
             catch (Exception ex)
             {

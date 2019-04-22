@@ -100,6 +100,8 @@
     <Compile Include="Base\BoolToUnBool.cs" />
     <Compile Include="Base\BoolToVisible.cs" />
     <Compile Include="Base\ExeclToPdfType.cs" />
+    <Compile Include="Base\Message\SettingView_HideEventArgs.cs" />
+    <Compile Include="Base\Message\SettingView_ShowFromHideEventArgs.cs" />
     <Compile Include="Base\PrintPdfType.cs" />
     <Compile Include="Base\Default.cs" />
     <Compile Include="Base\Helper.cs" />
@@ -153,6 +155,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resource\pdf.png" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -2,10 +2,12 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading;
 using System.Windows.Input;
+using System.Linq;
 
 namespace SchacoPDFViewer.ViewModel
 {
@@ -24,20 +26,21 @@ namespace SchacoPDFViewer.ViewModel
     public class MainViewModel : ViewModelBase
     {
         public IExcelToPDF ExcelToPDF { get; set; }
-        
 
-        public ICommand ShowCommand { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the MainViewModel class.
-        /// </summary>
-        public MainViewModel(IExcelToPDF excelToPDF)
+        bool _IsOpearting = false;
+        public bool IsOpearting
         {
-            //Initialize();
-            Register();
-            ShowCommand = new RelayCommand(LoadSelectedPDF);
-            ExcelToPDF = excelToPDF;
-            
+            get
+            {
+                return _IsOpearting;
+            }
+            set
+            {
+                _IsOpearting = value;
+                RaisePropertyChanged(() => IsOpearting);
+
+                
+            }
         }
 
         string _FolderPath;
@@ -96,6 +99,120 @@ namespace SchacoPDFViewer.ViewModel
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the MainViewModel class.
+        /// </summary>
+        public MainViewModel(IExcelToPDF excelToPDF)
+        {
+            //Initialize();
+            Register();
+            ShowCommand = new RelayCommand(ShowSelectedPDF,()=>!IsOpearting,true);
+            DeleteAllPDFCommand = new RelayCommand(DeleteAllPDF, () => !IsOpearting, true);
+            CreatAllPDFWithMultiThreadCommand = new RelayCommand(CreatAllPDFWithMultiThread, () => !IsOpearting, true);
+            RefreshCommand = new RelayCommand(Refresh,() => !IsOpearting, true);
+            ExcelToPDF = excelToPDF;
+        }
+
+        public ICommand ShowCommand { get; set; }
+        void ShowSelectedPDF()
+        {
+            try
+            {
+                IsOpearting = true;
+                if (SeletedNode.Type == TreeType.ExcelFlie)
+                {
+                    IsShowProgressCircle = true;
+                    Thread x = new Thread(() =>
+                    {
+                        ExcelToPDF.TurnToPDF(SeletedNode.FullExcelFileName, SeletedNode.FullPDFFileName);
+                        Messenger.Default.Send(new MainView_ShowSelectedPDFEventArgs() { PDFPath = SeletedNode.FullPDFFileName });
+                        IsShowProgressCircle = false;
+                        Initialize();
+                        IsOpearting = false;
+                    });
+                    x.Start();
+                }
+                else if (SeletedNode.Type == TreeType.Pdf)
+                {
+                    IsShowProgressCircle = true;
+                    Thread x = new Thread(() =>
+                    {
+                        Messenger.Default.Send(new MainView_ShowSelectedPDFEventArgs() { PDFPath = SeletedNode.FullPDFFileName });
+                        IsShowProgressCircle = false;
+                        Initialize();
+                        IsOpearting = false;
+                    });
+                    x.Start();
+                }
+               
+            }
+            catch (Exception ex)
+            {
+                MyLogger.LoggerInstance.Error(ex);
+            }
+        }
+
+        public ICommand DeleteAllPDFCommand { get; set; }
+        void DeleteAllPDF()
+        {
+            IsOpearting = true;
+            IsShowProgressCircle = true;
+            Thread x = new Thread(() =>
+             {
+                DirectoryInfo info = new DirectoryInfo(FolderPath);
+                var list = info.GetFiles("*.PDF", SearchOption.AllDirectories);
+                foreach (var item in list)
+                {
+                    File.Delete(item.FullName);
+                }
+                 Initialize();
+                 IsShowProgressCircle = false;
+                 IsOpearting = false;
+            });
+            x.Start();
+            
+        }
+
+        public ICommand RefreshCommand { get; set; }
+        void Refresh()
+        {
+            IsOpearting = true;
+            Initialize();
+            IsOpearting = false;
+        }
+
+        public ICommand CreatAllPDFWithMultiThreadCommand { get; set; }
+        void CreatAllPDFWithMultiThread()
+        {
+            IsOpearting = true;
+            IsShowProgressCircle = true;
+            Thread x = new Thread(()=> {
+                List<MyTreeNode> list = GetAllExcelFiles(Nodes);
+                list.ForEach(t => ExcelToPDF.TurnToPDF(t.FullExcelFileName, t.FullPDFFileName));
+                Initialize();
+                IsShowProgressCircle = false;
+                IsOpearting = false;
+            });
+            x.Start();
+        }
+
+        List<MyTreeNode> GetAllExcelFiles(ObservableCollection<MyTreeNode> Nodes)
+        {
+            List<MyTreeNode> list = new List<MyTreeNode>();
+            if (Nodes != null && Nodes.Count > 0)
+            {
+                foreach (var Node in Nodes)
+                {
+                    if (Node.Type == TreeType.ExcelFlie)
+                    {
+                        list.Add(Node);
+                    }
+                    list.AddRange(GetAllExcelFiles(Node.ChildNodes));
+                }
+            }
+            return list;
+        }
+
         public void Initialize()
         {
             NodesLoad();
@@ -113,6 +230,10 @@ namespace SchacoPDFViewer.ViewModel
                     if (Helper.CheckWhetherExcelFile(file.FullName))
                     {
                         dicTree.Type = TreeType.ExcelFlie;
+                    }
+                    else if (Helper.CheckWhetherPDFFile(file.FullName))
+                    {
+                        dicTree.Type = TreeType.Pdf;
                     }
                     else
                     {
@@ -152,6 +273,12 @@ namespace SchacoPDFViewer.ViewModel
             Nodes = new ObservableCollection<MyTreeNode>(node.ChildNodes);
         }
 
+        void SelectedChange(MainView_SelectedChangeEventArgs o)
+        {
+            SeletedNode = o.MyTreeNode;
+        }
+
+
         public void Register()
         {
             Messenger.Default.Register<MainView_SelectedChangeEventArgs>(this, SelectedChange);
@@ -164,33 +291,6 @@ namespace SchacoPDFViewer.ViewModel
             Messenger.Default.Unregister<MainView_UnregisterVM>(this);
         }
 
-        void SelectedChange(MainView_SelectedChangeEventArgs o)
-        {
-            SeletedNode = o.MyTreeNode;
-        }
-
-        void LoadSelectedPDF()
-        {
-            try
-            {
-                if (SeletedNode.Type == TreeType.ExcelFlie)
-                {
-                    IsShowProgressCircle = true;
-                    Thread x = new Thread(() =>
-                    {
-
-                        ExcelToPDF.TurnToPDF(SeletedNode.FullExcelFileName, SeletedNode.FullPDFFileName);
-                        Messenger.Default.Send( new MainView_ShowSelectedPDFEventArgs() { PDFPath = SeletedNode.FullPDFFileName });
-                        IsShowProgressCircle = false;
-                    });
-                    x.Start();
-                }
-            }
-            catch(Exception ex)
-            {
-                MyLogger.LoggerInstance.Error(ex);
-            }
-          
-        }
+      
     }
 }
