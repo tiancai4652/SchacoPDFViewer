@@ -147,12 +147,13 @@ namespace SchacoPDFViewer.ViewModel
                     });
                     x.Start();
                 }
-               
+
             }
             catch (Exception ex)
             {
                 MyLogger.LoggerInstance.Error(ex);
             }
+
         }
 
         public ICommand DeleteAllPDFCommand { get; set; }
@@ -313,12 +314,15 @@ namespace SchacoPDFViewer.ViewModel
         {
             Messenger.Default.Register<MainView_SelectedChangeEventArgs>(this, SelectedChange);
             Messenger.Default.Register<MainView_UnregisterVM>(this, (t)=> UnRegister());
+            Messenger.Default.Register<MainView_ShowPdfOverMsgEventArgs>(this, (t) => IsShowProgressCircle = true);
+            
         }
 
         public void UnRegister()
         {
             Messenger.Default.Unregister<MainView_SelectedChangeEventArgs>(this);
             Messenger.Default.Unregister<MainView_UnregisterVM>(this);
+            Messenger.Default.Unregister<MainView_ShowPdfOverMsgEventArgs>(this);
         }
 
       

@@ -168,6 +168,7 @@ namespace SchacoPDFViewer.ViewModel
                         SimpleIoc.Default.Register<IExcelToPDF, AsposeE2P>(true);
                         break;
                     case ExeclToPdfType.Office:
+                        SimpleIoc.Default.Register<IExcelToPDF, OfficeE2P>(true);
                         break;
                     default:
                         break;
@@ -195,7 +196,6 @@ namespace SchacoPDFViewer.ViewModel
         void OpenDialog()
         {
             System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
-            dialog.Description = "请选择Txt所在文件夹";
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 if (string.IsNullOrEmpty(dialog.SelectedPath))

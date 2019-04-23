@@ -56,6 +56,10 @@
     <Reference Include="MahApps.Metro, Version=1.6.5.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.6.5\lib\net40\MahApps.Metro.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="MoonPdfLib, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resource\MoonPdfLib.dll</HintPath>
@@ -102,6 +106,8 @@
     <Compile Include="Base\BoolToVisible.cs" />
     <Compile Include="Base\Class1.cs" />
     <Compile Include="Base\ExeclToPdfType.cs" />
+    <Compile Include="Base\Message\MainView_ShowPdfMsgEventArgs.cs" />
+    <Compile Include="Base\Message\MainView_ShowPdfOverMsgEventArgs.cs" />
     <Compile Include="Base\Message\SettingToPrinterView_CloseEventArgs.cs" />
     <Compile Include="Base\Message\SettingView_HideEventArgs.cs" />
     <Compile Include="Base\Message\SettingView_ShowFromHideEventArgs.cs" />
@@ -113,9 +119,10 @@
     <Compile Include="Base\Message\MainView_UnregisterVM.cs" />
     <Compile Include="Base\Message\SeetingView_ShowMsgEventArgs.cs" />
     <Compile Include="Base\Message\SettingView_UnregisterVM.cs" />
-    <Compile Include="Model\AsposeE2P.cs" />
+    <Compile Include="Model\IExcelToPDF\AsposeE2P.cs" />
+    <Compile Include="Model\IExcelToPDF\OfficeE2P.cs" />
     <Compile Include="Model\IPrintExcel\AsposePrintExcel.cs" />
-    <Compile Include="Model\IEecelToPDF.cs" />
+    <Compile Include="Model\IExcelToPDF\IEecelToPDF.cs" />
     <Compile Include="Model\IPrintExcel\IPrintExcel.cs" />
     <Compile Include="Model\IPrintPDF\IPrintPDF.cs" />
     <Compile Include="Base\Message\MvvmMessage.cs" />

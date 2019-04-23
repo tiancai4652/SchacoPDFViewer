@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -31,11 +32,13 @@ namespace SchacoPDFViewer
         public void Register()
         {
             Messenger.Default.Register<MainView_ShowSelectedPDFEventArgs>(this, ShowPDf);
+            Messenger.Default.Register<MainView_ShowPdfMsgEventArgs>(this, ShowMsg);
         }
 
         public void Unregister()
         {
             Messenger.Default.Unregister<MainView_ShowSelectedPDFEventArgs>(this);
+            Messenger.Default.Unregister<MainView_ShowPdfMsgEventArgs>(this);
             Messenger.Default.Send(this, new MainView_UnregisterVM());
             Messenger.Default.Unregister<MainView_UnregisterVM>(this);
 
@@ -53,18 +56,31 @@ namespace SchacoPDFViewer
 
         void ShowPDf(MainView_ShowSelectedPDFEventArgs args)
         {
-            try
+            Dispatcher.Invoke(new Action(() =>
             {
-                Dispatcher.Invoke(new Action(() =>
+                try
                 {
+
                     moonPdfPanel.OpenFile(args.PDFPath);
                     _isLoaded = true;
-                }));
-            }
-            catch (Exception ex)
-            {
-                _isLoaded = false;
-            }
+                }
+                catch (Exception ex)
+                {
+
+                }
+                finally
+                {
+                    _isLoaded = false;
+                    Messenger.Default.Send<MainView_ShowPdfOverMsgEventArgs>(new MainView_ShowPdfOverMsgEventArgs());
+                }
+            }));
+        }
+
+        void ShowMsg(MainView_ShowPdfMsgEventArgs args)
+        {
+            Dispatcher.Invoke(new Action(()=> { 
+            DialogManager.ShowMessageAsync(this, "提示", args.Msg);
+            }));
         }
 
 
