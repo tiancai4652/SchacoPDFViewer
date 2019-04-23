@@ -40,9 +40,17 @@
                 </StackPanel>
             </Grid>
             <TreeView HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Row="1"
-                      ItemsSource="{Binding Nodes}"  SelectedItemChanged="TreeView_SelectedItemChanged_1"
-                   
+                      ItemsSource="{Binding Nodes}"  SelectedItemChanged="TreeView_SelectedItemChanged_1" 
                       >
+              
+                           
+                <TreeView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="打开" Command="{Binding OpenFileCommand}"/>
+                        <MenuItem Header="打印" Command="{Binding PrintCommand}"/>
+                    </ContextMenu>
+                </TreeView.ContextMenu>
+
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="PreviewMouseDoubleClick" >
                         <command:EventToCommand Command="{Binding ShowCommand}" />
@@ -60,7 +68,9 @@
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="TreeViewItem">
                         <Setter Property="IsExpanded" Value="True"/>
+                        <EventSetter Event="TreeViewItem.PreviewMouseRightButtonDown" Handler="TreeViewItem_PreviewMouseRightButtonDown"/>
                     </Style>
+
                 </TreeView.ItemContainerStyle>
             </TreeView>
         </Grid>

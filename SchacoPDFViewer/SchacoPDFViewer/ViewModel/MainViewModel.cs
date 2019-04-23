@@ -112,6 +112,7 @@ namespace SchacoPDFViewer.ViewModel
             CreatAllPDFWithMultiThreadCommand = new RelayCommand(CreatAllPDFWithMultiThread, () => !IsOpearting, true);
             RefreshCommand = new RelayCommand(Refresh,() => !IsOpearting, true);
             PrintCommand = new RelayCommand(Print, () => !IsOpearting, true);
+            OpenFileCommand = new RelayCommand(OpenFile);
             ExcelToPDF = excelToPDF;
         }
 
@@ -207,6 +208,22 @@ namespace SchacoPDFViewer.ViewModel
             IsOpearting = false;
         }
 
+        public ICommand OpenFileCommand { get; set; }
+        void OpenFile()
+        {
+            if (SeletedNode.Type == TreeType.ExcelFlie)
+            {
+                System.Diagnostics.Process.Start(SeletedNode.FullExcelFileName);
+            }
+            if (SeletedNode.Type == TreeType.Pdf)
+            {
+                System.Diagnostics.Process.Start(SeletedNode.FullPDFFileName);
+            }
+            if (SeletedNode.Type == TreeType.Folder)
+            {
+                System.Diagnostics.Process.Start("explorer.exe", SeletedNode.FullExcelFileName);
+            }
+        }
        
 
         List<MyTreeNode> GetAllExcelFiles(ObservableCollection<MyTreeNode> Nodes)
