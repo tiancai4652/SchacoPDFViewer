@@ -66,7 +66,7 @@ namespace SchacoPDFViewer
                 }
                 catch (Exception ex)
                 {
-
+                    MyLogger.LoggerInstance.Error(ex);
                 }
                 finally
                 {
@@ -101,6 +101,7 @@ namespace SchacoPDFViewer
                 catch (Exception ex)
                 {
                     _isLoaded = false;
+                    MyLogger.LoggerInstance.Error(ex);
                 }
             }
         }

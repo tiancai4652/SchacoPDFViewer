@@ -41,6 +41,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resource\Aspose.Cells.dll</HintPath>
     </Reference>
+    <Reference Include="Aspose.PDF, Version=19.4.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <HintPath>..\packages\Aspose.PDF.19.4.0\lib\net4.0\Aspose.PDF.dll</HintPath>
+    </Reference>
     <Reference Include="CommonServiceLocator, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.2.0.2\lib\net40\CommonServiceLocator.dll</HintPath>
     </Reference>
@@ -74,6 +77,18 @@
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.6.2\lib\net40-client\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="Spire.Common, Version=2.4.6.6040, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.XLS.9.4.6\lib\net40\Spire.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.License, Version=1.3.7.40, Culture=neutral, PublicKeyToken=b1144360237c8b3f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.XLS.9.4.6\lib\net40\Spire.License.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Pdf, Version=5.4.9.2040, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.XLS.9.4.6\lib\net40\Spire.Pdf.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.XLS, Version=9.4.6.6040, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.XLS.9.4.6\lib\net40\Spire.XLS.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
@@ -104,7 +119,7 @@
     </ApplicationDefinition>
     <Compile Include="Base\BoolToUnBool.cs" />
     <Compile Include="Base\BoolToVisible.cs" />
-    <Compile Include="Base\Class1.cs" />
+    <Compile Include="Base\PrintExcelType.cs" />
     <Compile Include="Base\ExeclToPdfType.cs" />
     <Compile Include="Base\Message\MainView_ShowPdfMsgEventArgs.cs" />
     <Compile Include="Base\Message\MainView_ShowPdfOverMsgEventArgs.cs" />
@@ -121,9 +136,12 @@
     <Compile Include="Base\Message\SettingView_UnregisterVM.cs" />
     <Compile Include="Model\IExcelToPDF\AsposeE2P.cs" />
     <Compile Include="Model\IExcelToPDF\OfficeE2P.cs" />
+    <Compile Include="Model\IExcelToPDF\Spire_XLS_E2P.cs" />
     <Compile Include="Model\IPrintExcel\AsposePrintExcel.cs" />
     <Compile Include="Model\IExcelToPDF\IEecelToPDF.cs" />
     <Compile Include="Model\IPrintExcel\IPrintExcel.cs" />
+    <Compile Include="Model\IPrintExcel\Spire_XLS_PrintExcel.cs" />
+    <Compile Include="Model\IPrintPDF\Aspose_PDF_PrintPDF.cs" />
     <Compile Include="Model\IPrintPDF\IPrintPDF.cs" />
     <Compile Include="Base\Message\MvvmMessage.cs" />
     <Compile Include="Model\IPrintPDF\SumatraPDFPrintPDF.cs" />

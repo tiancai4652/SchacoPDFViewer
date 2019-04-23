@@ -44,7 +44,7 @@ namespace SchacoPDFViewer.ViewModel
             ////    SimpleIoc.Default.Register<IDataService, DataService>();
             ////}
 
-            SimpleIoc.Default.Register<MainViewModel>();
+            //SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<SettingsViewModel>();
             SimpleIoc.Default.Register<SettingToPrintViewModel>();
             //SimpleIoc.Default.Register<IExcelToPDF,AsposeE2P>();
@@ -54,6 +54,11 @@ namespace SchacoPDFViewer.ViewModel
         {
             get
             {
+                if(SimpleIoc.Default.IsRegistered<MainViewModel>())
+                {
+                    SimpleIoc.Default.Unregister<MainViewModel>();
+                }
+                SimpleIoc.Default.Register<MainViewModel>();
                 MainViewModel mvm= ServiceLocator.Current.GetInstance<MainViewModel>();
                 mvm.FolderPath = Settings.FolderPath;
                 mvm.Initialize();
@@ -98,20 +103,26 @@ namespace SchacoPDFViewer.ViewModel
                 SimpleIoc.Default.Unregister<IExcelToPDF>();
             }
             catch (Exception ex)
-            { }
+            {
+                MyLogger.LoggerInstance.Error(ex);
+            }
 
             try
             {
                 SimpleIoc.Default.Unregister<IPrintPDF>();
             }
             catch (Exception ex)
-            { }
+            {
+                MyLogger.LoggerInstance.Error(ex);
+            }
             try
             {
                 SimpleIoc.Default.Unregister<IPrintExcel>();
             }
             catch (Exception ex)
-            { }
+            {
+                MyLogger.LoggerInstance.Error(ex);
+            }
         }
     }
 }

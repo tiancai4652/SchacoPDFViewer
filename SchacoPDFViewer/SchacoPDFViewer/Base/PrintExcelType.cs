@@ -7,6 +7,7 @@ namespace SchacoPDFViewer
 {
    public enum PrintExcelType
     {
-        Aspose
+        Aspose,
+        Spire_XLS_PrintExcel
     }
 }

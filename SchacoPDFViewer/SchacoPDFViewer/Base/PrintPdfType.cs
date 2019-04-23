@@ -7,7 +7,7 @@ namespace SchacoPDFViewer
 {
     public enum PrintPdfType
     {
-        //Aspose,
+        Aspose_PDF,
         SumatraPDF
     }
 }

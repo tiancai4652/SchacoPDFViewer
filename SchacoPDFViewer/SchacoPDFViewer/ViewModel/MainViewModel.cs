@@ -40,7 +40,7 @@ namespace SchacoPDFViewer.ViewModel
                 _IsOpearting = value;
                 RaisePropertyChanged(() => IsOpearting);
 
-                
+
             }
         }
 
@@ -107,52 +107,71 @@ namespace SchacoPDFViewer.ViewModel
         {
             //Initialize();
             Register();
-            ShowCommand = new RelayCommand(ShowSelectedPDF,()=>!IsOpearting,true);
+            ShowCommand = new RelayCommand(ShowSelectedPDF, () => !IsOpearting, true);
             DeleteAllPDFCommand = new RelayCommand(DeleteAllPDF, () => !IsOpearting, true);
             CreatAllPDFWithMultiThreadCommand = new RelayCommand(CreatAllPDFWithMultiThread, () => !IsOpearting, true);
-            RefreshCommand = new RelayCommand(Refresh,() => !IsOpearting, true);
+            RefreshCommand = new RelayCommand(Refresh, () => !IsOpearting, true);
             PrintCommand = new RelayCommand(Print, () => !IsOpearting, true);
             OpenFileCommand = new RelayCommand(OpenFile);
+            DeleteCommand = new RelayCommand(Delete, () => !IsOpearting, true);
             ExcelToPDF = excelToPDF;
         }
 
         public ICommand ShowCommand { get; set; }
         void ShowSelectedPDF()
         {
-            try
+
+            IsOpearting = true;
+            if (SeletedNode.Type == TreeType.ExcelFlie)
             {
-                IsOpearting = true;
-                if (SeletedNode.Type == TreeType.ExcelFlie)
+                IsShowProgressCircle = true;
+                Thread x = new Thread(() =>
                 {
-                    IsShowProgressCircle = true;
-                    Thread x = new Thread(() =>
+                    try
                     {
                         ExcelToPDF.TurnToPDF(SeletedNode.FullExcelFileName, SeletedNode.FullPDFFileName);
                         Messenger.Default.Send(new MainView_ShowSelectedPDFEventArgs() { PDFPath = SeletedNode.FullPDFFileName });
-                        IsShowProgressCircle = false;
                         Initialize();
+                    }
+                    catch (Exception ex)
+                    {
+                        MyLogger.LoggerInstance.Error(ex);
+                        Messenger.Default.Send(new MainView_ShowPdfMsgEventArgs() { Msg = ex.Message });
+                    }
+                    finally
+                    {
+                        IsShowProgressCircle = false;
                         IsOpearting = false;
-                    });
-                    x.Start();
-                }
-                else if (SeletedNode.Type == TreeType.Pdf)
+                    }
+                });
+                x.Start();
+            }
+            else if (SeletedNode.Type == TreeType.Pdf)
+            {
+                IsShowProgressCircle = true;
+                Thread x = new Thread(() =>
                 {
-                    IsShowProgressCircle = true;
-                    Thread x = new Thread(() =>
+                    try
                     {
                         Messenger.Default.Send(new MainView_ShowSelectedPDFEventArgs() { PDFPath = SeletedNode.FullPDFFileName });
-                        IsShowProgressCircle = false;
                         Initialize();
+                    }
+                    catch (Exception ex)
+                    {
+                        MyLogger.LoggerInstance.Error(ex);
+                        Messenger.Default.Send(new MainView_ShowPdfMsgEventArgs() { Msg = ex.Message });
+                    }
+                    finally
+                    {
+                        IsShowProgressCircle = false;
                         IsOpearting = false;
-                    });
-                    x.Start();
-                }
+                    }
+                });
+                x.Start();
+            }
 
-            }
-            catch (Exception ex)
-            {
-                MyLogger.LoggerInstance.Error(ex);
-            }
+
+
 
         }
 
@@ -163,18 +182,18 @@ namespace SchacoPDFViewer.ViewModel
             IsShowProgressCircle = true;
             Thread x = new Thread(() =>
              {
-                DirectoryInfo info = new DirectoryInfo(FolderPath);
-                var list = info.GetFiles("*.PDF", SearchOption.AllDirectories);
-                foreach (var item in list)
-                {
-                    File.Delete(item.FullName);
-                }
+                 DirectoryInfo info = new DirectoryInfo(FolderPath);
+                 var list = info.GetFiles("*.PDF", SearchOption.AllDirectories);
+                 foreach (var item in list)
+                 {
+                     File.Delete(item.FullName);
+                 }
                  Initialize();
                  IsShowProgressCircle = false;
                  IsOpearting = false;
-            });
+             });
             x.Start();
-            
+
         }
 
         public ICommand RefreshCommand { get; set; }
@@ -190,12 +209,24 @@ namespace SchacoPDFViewer.ViewModel
         {
             IsOpearting = true;
             IsShowProgressCircle = true;
-            Thread x = new Thread(()=> {
-                List<MyTreeNode> list = GetAllExcelFiles(Nodes);
-                list.ForEach(t => ExcelToPDF.TurnToPDF(t.FullExcelFileName, t.FullPDFFileName));
-                Initialize();
-                IsShowProgressCircle = false;
-                IsOpearting = false;
+            Thread x = new Thread(() =>
+            {
+                try
+                {
+                    List<MyTreeNode> list = GetAllExcelFiles(Nodes);
+                    list.ForEach(t => ExcelToPDF.TurnToPDF(t.FullExcelFileName, t.FullPDFFileName));
+                    Initialize();
+                }
+                catch(Exception ex)
+                {
+                    MyLogger.LoggerInstance.Error(ex);
+                    Messenger.Default.Send(new MainView_ShowPdfMsgEventArgs() { Msg = ex.Message });
+                }
+                finally
+                {
+                    IsShowProgressCircle = false;
+                    IsOpearting = false;
+                }
             });
             x.Start();
         }
@@ -225,7 +256,29 @@ namespace SchacoPDFViewer.ViewModel
                 System.Diagnostics.Process.Start("explorer.exe", SeletedNode.FullExcelFileName);
             }
         }
-       
+
+        public ICommand DeleteCommand { get; set; }
+        void Delete()
+        {
+            IsOpearting = true;
+            if (SeletedNode.Type == TreeType.Folder)
+            {
+                if (Directory.Exists(SeletedNode.FullExcelFileName))
+                {
+                    Directory.Delete(SeletedNode.FullExcelFileName, true);
+                }
+            }
+            else
+            {
+                if (File.Exists(SeletedNode.FullExcelFileName))
+                {
+                    File.Delete(SeletedNode.FullExcelFileName);
+                }
+            }
+            Initialize();
+            IsOpearting = false;
+        }
+
 
         List<MyTreeNode> GetAllExcelFiles(ObservableCollection<MyTreeNode> Nodes)
         {
@@ -249,7 +302,7 @@ namespace SchacoPDFViewer.ViewModel
             NodesLoad();
         }
 
-        void GetNodes(DirectoryInfo info,ref MyTreeNode node)
+        void GetNodes(DirectoryInfo info, ref MyTreeNode node)
         {
             var files = info.GetFiles();
             foreach (var file in files)
@@ -274,7 +327,7 @@ namespace SchacoPDFViewer.ViewModel
                     dicTree.ExcelFileName = file.Name;
                     string dir = Path.GetDirectoryName(file.FullName);
                     string filename = Path.GetFileName(dicTree.FullExcelFileName);
-                    string pdfFlename = Path.ChangeExtension(filename,".PDF");
+                    string pdfFlename = Path.ChangeExtension(filename, ".PDF");
                     dicTree.FullPDFFileName = dir + "\\" + pdfFlename;
                     node.ChildNodes.Add(dicTree);
                 }
@@ -290,7 +343,7 @@ namespace SchacoPDFViewer.ViewModel
                     dicTree.Type = TreeType.Folder;
                     dicTree.FullExcelFileName = dic.FullName;
                     dicTree.ExcelFileName = dic.Name;
-                    GetNodes(dic,ref dicTree);
+                    GetNodes(dic, ref dicTree);
                     node.ChildNodes.Add(dicTree);
                 }
             }
@@ -313,9 +366,9 @@ namespace SchacoPDFViewer.ViewModel
         public void Register()
         {
             Messenger.Default.Register<MainView_SelectedChangeEventArgs>(this, SelectedChange);
-            Messenger.Default.Register<MainView_UnregisterVM>(this, (t)=> UnRegister());
+            Messenger.Default.Register<MainView_UnregisterVM>(this, (t) => UnRegister());
             Messenger.Default.Register<MainView_ShowPdfOverMsgEventArgs>(this, (t) => IsShowProgressCircle = true);
-            
+
         }
 
         public void UnRegister()
@@ -325,6 +378,6 @@ namespace SchacoPDFViewer.ViewModel
             Messenger.Default.Unregister<MainView_ShowPdfOverMsgEventArgs>(this);
         }
 
-      
+
     }
 }

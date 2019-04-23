@@ -15,7 +15,7 @@ namespace SchacoPDFViewer.ViewModel
 {
     public class SettingsViewModel: ViewModelBase
     {
-        ObservableCollection<ExeclToPdfType> _E2PCollection = new ObservableCollection<ExeclToPdfType>() { ExeclToPdfType.Aspose, ExeclToPdfType.Office };
+        ObservableCollection<ExeclToPdfType> _E2PCollection = new ObservableCollection<ExeclToPdfType>() { ExeclToPdfType.Aspose, ExeclToPdfType.Spire_XLS, ExeclToPdfType.Office };
         public ObservableCollection<ExeclToPdfType> E2PCollection
         {
             get
@@ -29,7 +29,7 @@ namespace SchacoPDFViewer.ViewModel
             }
         }
 
-        ObservableCollection<PrintPdfType> _PrintPDFCollection = new ObservableCollection<PrintPdfType>() { PrintPdfType.SumatraPDF };
+        ObservableCollection<PrintPdfType> _PrintPDFCollection = new ObservableCollection<PrintPdfType>() { PrintPdfType.SumatraPDF, PrintPdfType.Aspose_PDF };
         public ObservableCollection<PrintPdfType> PrintPDFCollection
         {
             get
@@ -57,7 +57,7 @@ namespace SchacoPDFViewer.ViewModel
             }
         }
 
-        ObservableCollection<PrintExcelType> _PrintExcelCollection = new ObservableCollection<PrintExcelType>() { PrintExcelType.Aspose };
+        ObservableCollection<PrintExcelType> _PrintExcelCollection = new ObservableCollection<PrintExcelType>() { PrintExcelType.Aspose, PrintExcelType.Spire_XLS_PrintExcel };
         public ObservableCollection<PrintExcelType> PrintExcelCollection
         {
             get
@@ -149,6 +149,9 @@ namespace SchacoPDFViewer.ViewModel
                     case PrintPdfType.SumatraPDF:
                         SimpleIoc.Default.Register<IPrintPDF, SumatraPDFPrintPDF>(true);
                         break;
+                    case PrintPdfType.Aspose_PDF:
+                        SimpleIoc.Default.Register<IPrintPDF, Aspose_PDF_PrintPDF>(true);
+                        break;
                  
                     default:
                         break;
@@ -157,6 +160,9 @@ namespace SchacoPDFViewer.ViewModel
                 {
                     case  PrintExcelType.Aspose:
                         SimpleIoc.Default.Register<IPrintExcel, AsposePrintExcel>(true);
+                        break;
+                    case PrintExcelType.Spire_XLS_PrintExcel:
+                        SimpleIoc.Default.Register<IPrintExcel, Spire_XLS_PrintExcel>(true);
                         break;
 
                     default:
@@ -170,6 +176,9 @@ namespace SchacoPDFViewer.ViewModel
                     case ExeclToPdfType.Office:
                         SimpleIoc.Default.Register<IExcelToPDF, OfficeE2P>(true);
                         break;
+                    case ExeclToPdfType.Spire_XLS:
+                        SimpleIoc.Default.Register<IExcelToPDF, Spire_XLS_E2P>(true);
+                        break;
                     default:
                         break;
                 }
@@ -181,7 +190,7 @@ namespace SchacoPDFViewer.ViewModel
             }
             catch (Exception ex)
             {
-
+                MyLogger.LoggerInstance.Error(ex);
             }
             finally
             {

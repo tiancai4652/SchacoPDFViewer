@@ -8,6 +8,7 @@ namespace SchacoPDFViewer
     public enum ExeclToPdfType
     {
         Aspose,
+        Spire_XLS,
         Office
     }
 }

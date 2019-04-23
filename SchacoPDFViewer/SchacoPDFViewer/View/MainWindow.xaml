@@ -48,6 +48,7 @@
                     <ContextMenu>
                         <MenuItem Header="打开" Command="{Binding OpenFileCommand}"/>
                         <MenuItem Header="打印" Command="{Binding PrintCommand}"/>
+                        <MenuItem Header="删除" Command="{Binding DeleteCommand}"/>
                     </ContextMenu>
                 </TreeView.ContextMenu>
 
