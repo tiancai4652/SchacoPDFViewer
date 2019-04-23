@@ -28,7 +28,7 @@
                 <Button Command="{Binding OKCommand}" Width="100" Height="35" Margin="10">打印</Button>
                 <Button Command="{Binding CancelCommand}" Width="100" Height="35" Margin="10" RenderTransformOrigin="-0.18,0.429">取消</Button>
             </StackPanel>
-            <CheckBox Margin="10" Command="{Binding IsSetDuplex}">双面打印</CheckBox>
+            <CheckBox Margin="10" IsChecked="{Binding IsSetDuplex,UpdateSourceTrigger=PropertyChanged}">双面打印</CheckBox>
         </Grid>
     </Grid>
 </controls:MetroWindow>
