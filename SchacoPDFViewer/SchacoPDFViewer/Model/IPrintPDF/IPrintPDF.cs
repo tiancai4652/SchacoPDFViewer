@@ -5,9 +5,8 @@ using System.Text;
 
 namespace SchacoPDFViewer
 {
-    public enum PrintPdfType
+    public interface IPrintPDF
     {
-        //Aspose,
-        SumatraPDF
+        void Print(string pdfFileName,string printer, bool IsDupex = true);
     }
 }

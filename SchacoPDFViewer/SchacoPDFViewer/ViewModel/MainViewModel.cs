@@ -8,6 +8,7 @@ using System.IO;
 using System.Threading;
 using System.Windows.Input;
 using System.Linq;
+using CommonServiceLocator;
 
 namespace SchacoPDFViewer.ViewModel
 {
@@ -110,6 +111,7 @@ namespace SchacoPDFViewer.ViewModel
             DeleteAllPDFCommand = new RelayCommand(DeleteAllPDF, () => !IsOpearting, true);
             CreatAllPDFWithMultiThreadCommand = new RelayCommand(CreatAllPDFWithMultiThread, () => !IsOpearting, true);
             RefreshCommand = new RelayCommand(Refresh,() => !IsOpearting, true);
+            PrintCommand = new RelayCommand(Print, () => !IsOpearting, true);
             ExcelToPDF = excelToPDF;
         }
 
@@ -195,6 +197,17 @@ namespace SchacoPDFViewer.ViewModel
             });
             x.Start();
         }
+
+        public ICommand PrintCommand { get; set; }
+        void Print()
+        {
+            IsOpearting = true;
+            SettingToPrintView v = new SettingToPrintView();
+            v.ShowDialog();
+            IsOpearting = false;
+        }
+
+       
 
         List<MyTreeNode> GetAllExcelFiles(ObservableCollection<MyTreeNode> Nodes)
         {

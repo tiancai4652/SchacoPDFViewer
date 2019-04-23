@@ -33,10 +33,10 @@
             <!--TreeViewItem.Selected="TreeView_SelectedItemChanged"-->
             <Grid>
                 <StackPanel Orientation="Horizontal">
-                    <Button Width="100" Margin="5" Command="{Binding CreatAllPDFWithMultiThreadCommand}">一键生成所有PDF</Button>
-                    <Button Width="100" Margin="5" Command="{Binding DeleteAllPDFCommand}">一键删除所有PDF</Button>
-                    <Button Width="100" Margin="5" Command="{Binding RefreshCommand}">刷新</Button>
-                  
+                    <Button Width="90" Margin="5" Command="{Binding CreatAllPDFWithMultiThreadCommand}">异步生成所有PDF</Button>
+                    <Button Width="90" Margin="5" Command="{Binding DeleteAllPDFCommand}">同步删除所有PDF</Button>
+                    <Button Width="90" Margin="5" Command="{Binding RefreshCommand}">刷新</Button>
+                    <Button Width="90" Margin="5" Command="{Binding PrintCommand}">打印</Button>
                 </StackPanel>
             </Grid>
             <TreeView HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Row="1"

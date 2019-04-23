@@ -5,9 +5,8 @@ using System.Text;
 
 namespace SchacoPDFViewer
 {
-    public enum PrintPdfType
+    public class SettingToPrinterView_CloseEventArgs
     {
-        //Aspose,
-        SumatraPDF
+
     }
 }

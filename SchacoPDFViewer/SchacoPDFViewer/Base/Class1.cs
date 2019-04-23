@@ -5,8 +5,8 @@ using System.Text;
 
 namespace SchacoPDFViewer
 {
-    public interface IPrintPDF
+   public enum PrintExcelType
     {
-
+        Aspose
     }
 }

@@ -29,7 +29,7 @@ namespace SchacoPDFViewer.ViewModel
             }
         }
 
-        ObservableCollection<PrintPdfType> _PrintPDFCollection = new ObservableCollection<PrintPdfType>() { PrintPdfType.Aspose, PrintPdfType.SumatraPDF };
+        ObservableCollection<PrintPdfType> _PrintPDFCollection = new ObservableCollection<PrintPdfType>() { PrintPdfType.SumatraPDF };
         public ObservableCollection<PrintPdfType> PrintPDFCollection
         {
             get
@@ -43,7 +43,7 @@ namespace SchacoPDFViewer.ViewModel
             }
         }
 
-        PrintPdfType _SelectedPrintPdfType = PrintPdfType.Aspose;
+        PrintPdfType _SelectedPrintPdfType = PrintPdfType.SumatraPDF;
         public PrintPdfType SelectedPrintPdfType
         {
             get
@@ -54,6 +54,34 @@ namespace SchacoPDFViewer.ViewModel
             {
                 _SelectedPrintPdfType = value;
                 RaisePropertyChanged(() => SelectedPrintPdfType);
+            }
+        }
+
+        ObservableCollection<PrintExcelType> _PrintExcelCollection = new ObservableCollection<PrintExcelType>() { PrintExcelType.Aspose };
+        public ObservableCollection<PrintExcelType> PrintExcelCollection
+        {
+            get
+            {
+                return _PrintExcelCollection;
+            }
+            set
+            {
+                _PrintExcelCollection = value;
+                RaisePropertyChanged(() => PrintExcelCollection);
+            }
+        }
+
+        PrintExcelType _SelectedPrintExcelType = PrintExcelType.Aspose;
+        public PrintExcelType SelectedPrintExcelType
+        {
+            get
+            {
+                return _SelectedPrintExcelType;
+            }
+            set
+            {
+                _SelectedPrintExcelType = value;
+                RaisePropertyChanged(() => SelectedPrintExcelType);
             }
         }
 
@@ -118,18 +146,26 @@ namespace SchacoPDFViewer.ViewModel
 
                 switch (SelectedPrintPdfType)
                 {
-                    case PrintPdfType.Aspose:
-                        SimpleIoc.Default.Register<IExcelToPDF, AsposeE2P>(true);
-                        break;
                     case PrintPdfType.SumatraPDF:
+                        SimpleIoc.Default.Register<IPrintPDF, SumatraPDFPrintPDF>(true);
                         break;
+                 
+                    default:
+                        break;
+                }
+                switch (SelectedPrintExcelType)
+                {
+                    case  PrintExcelType.Aspose:
+                        SimpleIoc.Default.Register<IPrintExcel, AsposePrintExcel>(true);
+                        break;
+
                     default:
                         break;
                 }
                 switch (SelectedExeclToPdfType)
                 {
                     case ExeclToPdfType.Aspose:
-                        //SimpleIoc.Default.Register<MainViewModel>(true);
+                        SimpleIoc.Default.Register<IExcelToPDF, AsposeE2P>(true);
                         break;
                     case ExeclToPdfType.Office:
                         break;
