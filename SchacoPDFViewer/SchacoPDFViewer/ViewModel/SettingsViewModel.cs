@@ -214,6 +214,7 @@ namespace SchacoPDFViewer.ViewModel
                 }
 
                 FolderPath = dialog.SelectedPath;
+                Default.Save(dialog.SelectedPath);
             }
         }
 
