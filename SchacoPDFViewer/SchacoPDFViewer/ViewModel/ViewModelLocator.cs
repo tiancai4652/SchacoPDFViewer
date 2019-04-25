@@ -84,7 +84,7 @@ namespace SchacoPDFViewer.ViewModel
             {
                 s.SeletedNode.Type == TreeType.ExcelFlie ? s.SeletedNode.FullExcelFileName :
                 (s.SeletedNode.Type == TreeType.Folder ? s.SeletedNode.FullPDFFileName : "") };
-                return ServiceLocator.Current.GetInstance<SettingToPrintViewModel>();
+                return vm;
             }
         }
 

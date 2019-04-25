@@ -12,10 +12,12 @@ namespace SchacoPDFViewer
         public void Print(string pdfFileName, string printer, bool IsDupex = true)
         {
             Workbook workbook = new Workbook();
-            workbook.LoadFromFile("sample.xlsx");
+            workbook.LoadFromFile(pdfFileName);
             PrintDocument pd = workbook.PrintDocument;
             PrinterSettings ps = new PrinterSettings();
+
             ps.Duplex = IsDupex? Duplex.Vertical: Duplex.Default;
+            ps.PrinterName = printer;
             pd.PrinterSettings = ps;
             pd.Print();
         }
