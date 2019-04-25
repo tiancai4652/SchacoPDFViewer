@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace SchacoPDFViewer.ViewModel
 {
-    public class SettingToPrintViewModel: ViewModelBase
+    public class SettingToPrintViewModel : ViewModelBase
     {
         ObservableCollection<string> _PrinterList = new ObservableCollection<string>();
         public ObservableCollection<string> PrinterList
@@ -74,6 +74,7 @@ namespace SchacoPDFViewer.ViewModel
             PropertyCommand = new RelayCommand(PropertySet);
             OKCommand = new RelayCommand(OK);
             CancelCommand = new RelayCommand(Cancel);
+            OptionCommand = new RelayCommand(Option);
         }
 
         public ICommand PropertyCommand { get; set; }
@@ -86,7 +87,7 @@ namespace SchacoPDFViewer.ViewModel
             string pcName = System.Environment.MachineName;
             string printerName = SelectedPrinter;
             Process p = new Process();
-            p.StartInfo = new ProcessStartInfo("rundll32.exe", $@"printui.dll,PrintUIEntry /e /n\\{pcName}\\" + $"\"{printerName}\"");
+            p.StartInfo = new ProcessStartInfo("rundll32.exe", $@"printui.dll,PrintUIEntry /p /n\\{pcName}\\" + $"\"{printerName}\"");
             p.StartInfo.UseShellExecute = false;
             p.Start();
         }
@@ -106,6 +107,22 @@ namespace SchacoPDFViewer.ViewModel
                 }
             }
         }
+
+        public ICommand OptionCommand { get; set; }
+        void Option()
+        {
+            if (string.IsNullOrEmpty(SelectedPrinter))
+            {
+                return;
+            }
+            string pcName = System.Environment.MachineName;
+            string printerName = SelectedPrinter;
+            Process p = new Process();
+            p.StartInfo = new ProcessStartInfo("rundll32.exe", $@"printui.dll,PrintUIEntry /e /n\\{pcName}\\" + $"\"{printerName}\"");
+            p.StartInfo.UseShellExecute = false;
+            p.Start();
+        }
+
 
         public ICommand CancelCommand { get; set; }
         void Cancel()

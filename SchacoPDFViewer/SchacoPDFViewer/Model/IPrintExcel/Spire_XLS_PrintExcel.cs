@@ -13,12 +13,17 @@ namespace SchacoPDFViewer
         {
             Workbook workbook = new Workbook();
             workbook.LoadFromFile(pdfFileName);
+            Helper.SetDefaultPrinter(printer);
             PrintDocument pd = workbook.PrintDocument;
-            PrinterSettings ps = new PrinterSettings();
 
-            ps.Duplex = IsDupex? Duplex.Vertical: Duplex.Default;
-            ps.PrinterName = printer;
-            pd.PrinterSettings = ps;
+
+            //PrinterSettings ps = new PrinterSettings();
+            //ps.Duplex = IsDupex? Duplex.Vertical: Duplex.Default;
+            //ps.PrinterName = printer;
+            //pd.PrinterSettings = ps;
+
+        
+
             pd.Print();
         }
     }

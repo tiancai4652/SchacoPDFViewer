@@ -20,11 +20,12 @@ namespace SchacoPDFViewer
             viewer.AutoRotate = true;
             viewer.PrintPageDialog = false;
 
-            PrinterSettings ps = new PrinterSettings();
-            ps.PrinterName = printer;
-            ps.Duplex = IsDupex ? Duplex.Vertical : Duplex.Default;
+            //PrinterSettings ps = new PrinterSettings();
+            //ps.PrinterName = printer;
+            //ps.Duplex = IsDupex ? Duplex.Vertical : Duplex.Default;
 
-            viewer.PrintDocumentWithSettings(ps);
+            //viewer.PrintDocumentWithSettings(ps);
+            viewer.PrintDocument();
         }
     }
 }

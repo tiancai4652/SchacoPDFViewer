@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace SchacoPDFViewer
@@ -30,5 +31,13 @@ namespace SchacoPDFViewer
             }
             return false;
         }
+
+        /// <summary>
+        /// 调用win api将指定名称的打印机设置为默认打印机
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <returns></returns>
+        [DllImport("winspool.drv")]
+        public static extern bool SetDefaultPrinter(String Name);
     }
 }

@@ -18,8 +18,9 @@
         <Grid Height="60" Grid.Row="0">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center">打印机:</TextBlock>
-                <ComboBox SelectedItem="{Binding SelectedPrinter}" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" Width="390" ItemsSource="{Binding PrinterList}"></ComboBox>
+                <ComboBox SelectedItem="{Binding SelectedPrinter}" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" Width="275" ItemsSource="{Binding PrinterList}"></ComboBox>
                 <Button Height="35" Width="100" Margin="10" Command="{Binding PropertyCommand}">属性</Button>
+                <Button Height="35" Width="100" Margin="10" Command="{Binding OptionCommand}">首选项</Button>
             </StackPanel>
         </Grid>
         <Grid Grid.Row="1">
