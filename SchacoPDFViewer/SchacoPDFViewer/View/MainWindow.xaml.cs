@@ -29,7 +29,7 @@ namespace SchacoPDFViewer
             Register();
 
             Aspose.Cells.License li = new Aspose.Cells.License();
-            string path = System.Windows.Forms.Application.StartupPath+"\\" + @"Aspose.Total.lic";
+            string path = System.Windows.Forms.Application.StartupPath + "\\" + @"Aspose.Total.lic";
             li.SetLicense(path);
         }
 

@@ -1,4 +1,5 @@
 ﻿using Aspose.Cells;
+using Aspose.Cells.Rendering;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,7 +27,10 @@ namespace SchacoPDFViewer
                 {
                     File.Delete(targetPdfFile);
                 }
-                wb.Save(targetPdfFile, SaveFormat.Pdf);
+                PdfSaveOptions options = new PdfSaveOptions();
+
+                wb.Save(targetPdfFile, options);
+            
             }
             catch (Exception ex)
             {

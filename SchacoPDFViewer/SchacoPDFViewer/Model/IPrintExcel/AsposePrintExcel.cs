@@ -25,11 +25,11 @@ namespace SchacoPDFViewer
             //Aspose.Cells.Rendering.ImageOrPrintOptions options = new Aspose.Cells.Rendering.ImageOrPrintOptions();
             //options.PrintingPage = PrintingPageType.Default;
             WorkbookRender wr = new WorkbookRender(workbook, new ImageOrPrintOptions());
-
-            //PrinterSettings setting = new PrinterSettings();
-            ////在界面设置里设置不管用 设置双面打印
-            //setting.Duplex = IsDupex ? Duplex.Vertical : Duplex.Default;
-            //setting.PrinterName = printer;
+            
+            PrinterSettings setting = new PrinterSettings();
+            //在界面设置里设置不管用 设置双面打印
+            setting.Duplex = IsDupex ? Duplex.Vertical : Duplex.Default;
+            setting.PrinterName = printer;
             Helper.SetDefaultPrinter(printer);
             //wr.ToPrinter(setting);
             wr.ToPrinter(printer);
