@@ -28,7 +28,7 @@ namespace SchacoPDFViewer
                     File.Delete(targetPdfFile);
                 }
                 PdfSaveOptions options = new PdfSaveOptions();
-
+                options.Compliance = PdfCompliance.None;
                 wb.Save(targetPdfFile, options);
             
             }

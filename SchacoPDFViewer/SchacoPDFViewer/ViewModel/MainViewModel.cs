@@ -327,8 +327,11 @@ namespace SchacoPDFViewer.ViewModel
                     dicTree.ExcelFileName = file.Name;
                     string dir = Path.GetDirectoryName(file.FullName);
                     string filename = Path.GetFileName(dicTree.FullExcelFileName);
-                    string pdfFlename = Path.ChangeExtension(filename, ".PDF");
-                    dicTree.FullPDFFileName = dir + "\\" + pdfFlename;
+                    if (dicTree.Type == TreeType.ExcelFlie)
+                    {
+                        filename = Path.ChangeExtension(filename, ".PDF").Replace(".PDF", this.ExcelToPDF.ToString() + ".PDF");
+                    }
+                    dicTree.FullPDFFileName = dir + "\\" + filename;
                     node.ChildNodes.Add(dicTree);
                 }
             }
