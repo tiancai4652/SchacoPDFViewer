@@ -26,3 +26,11 @@ libmupdf进行pdf预览
 
 为了解决通过原生Office转excel到PDF的用户必须安装MS Office才能转换，进而测试不依赖Office的组件Aspose和Spire
 
+
+### 再次吐槽一下客户Office的坑 ###
+
+1 客户是精简版Office   
+2 Office2007还需要安装XPS组件  
+3 客户用不同版本的Office编辑Excel有兼容性错误  
+4 Win10自带的Office需要重新安装才能转POF(即不是完整安装)
+
