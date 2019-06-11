@@ -40,32 +40,33 @@ namespace SchacoPDFViewer
             }
         }
 
-        void AddWaterMark(string sourceExcelFile)
+        /// <summary>
+        /// 添加演示版水印到excel文件
+        /// </summary>
+        /// <param name="sourceExcelFile"></param>
+        public static void AddWaterMark(string sourceExcelFile)
         {
-            #region 20190610演示版增加水印效果
 
+            //string content = Cal2.Wpf.ModuleBase.ACalProductInfo.Company == ModuleBase.CompanyName.Additel ? "Demo" : "演示版";
+            string content = "销售演示版";
             try
             {
                 Aspose.Cells.Workbook workbook = new Aspose.Cells.Workbook(sourceExcelFile);
                 for (int i = 0; i < workbook.Worksheets.Count; i++)
                 {
-                    int firstRowIndex = workbook.Worksheets[i].FirstVisibleRow;
-                    int rowMaxIndex = workbook.Worksheets[i].Cells.Rows.Count;
+                
+                    int firstRowIndex = 0;
+                    int rowMaxIndex = workbook.Worksheets[i].Cells.MaxDataRow;
 
-                    //int firstColumsIndex = workbook.Worksheets[i].FirstVisibleColumn;
-                    //int columnMaxIndex = workbook.Worksheets[i].Cells.Columns.Count;
-
-                    int row = firstRowIndex+ 1;
-                    while (row < rowMaxIndex+ firstRowIndex)
+                    int row = firstRowIndex + 1;
+                    while (row < rowMaxIndex + firstRowIndex - 10)
                     {
 
                         AddWaterMarkInSheet(workbook.Worksheets[i], MsoPresetTextEffect.TextEffect2,
-    "演示版", "", 50, false, true
+    content, "", 50, false, true
     , row, 0, 1, 0, 100, 500);
-
                         row += 30;
                     }
-
                 }
 
                 workbook.Save(sourceExcelFile);
@@ -75,16 +76,32 @@ namespace SchacoPDFViewer
             {
 
             }
-            #endregion
+
         }
 
 
-        void AddWaterMarkInSheet(Worksheet worksheet, MsoPresetTextEffect effect, string text, 
-            string fontName, int size, bool fontBold, bool fontItalic, int upperLeftRow, 
+        /// <summary>
+        /// 在sheet中添加水印
+        /// </summary>
+        /// <param name="worksheet"></param>
+        /// <param name="effect"></param>
+        /// <param name="text"></param>
+        /// <param name="fontName"></param>
+        /// <param name="size"></param>
+        /// <param name="fontBold"></param>
+        /// <param name="fontItalic"></param>
+        /// <param name="upperLeftRow"></param>
+        /// <param name="top"></param>
+        /// <param name="upperLeftColumn"></param>
+        /// <param name="left"></param>
+        /// <param name="height"></param>
+        /// <param name="width"></param>
+        static void AddWaterMarkInSheet(Worksheet worksheet, MsoPresetTextEffect effect, string text,
+            string fontName, int size, bool fontBold, bool fontItalic, int upperLeftRow,
             int top, int upperLeftColumn, int left, int height, int width)
         {
             Aspose.Cells.Drawing.Shape wordart = worksheet.Shapes.AddTextEffect(
-                effect,text, fontName, size, fontBold, fontItalic, upperLeftRow, top, upperLeftColumn, left, height,width);
+                effect, text, fontName, size, fontBold, fontItalic, upperLeftRow, top, upperLeftColumn, left, height, width);
 
             MsoFillFormat wordArtFormat = wordart.FillFormat;
             wordArtFormat.ForeColor = System.Drawing.Color.Red;
