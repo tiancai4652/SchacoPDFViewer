@@ -17,7 +17,13 @@ namespace SchacoPDFViewer
 
         public void TurnToPDF(string sourceExcelFile, string targetPdfFile)
         {
-            AddWaterMark(sourceExcelFile);
+
+            #region 添加水印
+            if (true)
+            {
+                AddWaterMark(sourceExcelFile);
+            }
+            #endregion
             try
             {
                 if (!File.Exists(sourceExcelFile))

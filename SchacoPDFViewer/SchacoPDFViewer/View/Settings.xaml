@@ -7,7 +7,7 @@
          DataContext="{Binding Source={StaticResource Locator}, Path=Settings}"
         xmlns:local="clr-namespace:SchacoPDFViewer"
         mc:Ignorable="d"
-        Title="Settings" Height="300" Width="800"  WindowStartupLocation="CenterScreen" Closing="MetroWindow_Closing" >
+        Title="Settings" Height="500" Width="800"  WindowStartupLocation="CenterScreen" Closing="MetroWindow_Closing" >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
@@ -25,13 +25,17 @@
             </Grid>
         </Grid>
         <Grid Grid.Row="1">
-        <Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <GroupBox Grid.Column="0" Margin="20,5" Header="Choose Excel To PDF Tool">
+            </Grid.ColumnDefinitions>
+            <GroupBox Grid.Column="0" Margin="20,5" Header="Choose Excel To PDF Tool">
                 <ComboBox ItemsSource="{Binding E2PCollection}" SelectedItem="{Binding SelectedExeclToPdfType}" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200" Height="25"></ComboBox>
-        </GroupBox>
+            </GroupBox>
             <GroupBox Grid.Column="1" Margin="20,5" Header="Choose Print PDF Tool">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="10">
@@ -44,7 +48,18 @@
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
-    </Grid>
+            <GroupBox Grid.Column="0" Grid.Row="1" Margin="20,5" Header="Choose Print PDF Tool">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <CheckBox>启用水印</CheckBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">水印内容:</TextBlock>
+                        <TextBox Width="260"></TextBox>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+        </Grid>
         <Grid Grid.Row="2">
             <Button Command="{Binding NextCommand}" Width="200" HorizontalAlignment="Right" Margin="20,5">Next</Button>
         </Grid>
